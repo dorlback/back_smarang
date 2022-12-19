@@ -78,6 +78,8 @@ class Modules():
 
     def M_get_B(ket_list,region,job):
 
+
+
         brand_list = Brand.objects.filter(brand_addr__contains= region)
     
         val5_list = []
@@ -160,11 +162,9 @@ class Modules():
  
         del key_list[-1*len(industry):-1]
    
-        key_list+industry+key_list
-
-
+        key_list=industry+key_list
         val_list = []
-
+        
         value=len(key_list)
         for key_words in key_list:
 
@@ -278,19 +278,52 @@ class Ai_test(APIView):
         marketer = Modules.B_get_M(key_list,addr,industry)
 
         marketer_list = Modules.Get_marketerlist(marketer)
+        
+        return_list = []
 
         for x in marketer_list:
-            print({'마케터 나이':x.marketer_age,'주소':x.marketer_addr,'경력':x.marketer_job,'경력 년수':x.marketer_career,'참여형식':x.marketer_form})
-
+            return_list.append({'마케터 나이':x.marketer_age,'주소':x.marketer_addr,'경력':x.marketer_job,'경력 년수':x.marketer_career,'참여형식':x.marketer_form})
         return Response( status=status.HTTP_201_CREATED)
 
+
+class Brand_getMarketer(APIView):
+
+    def post(self,request):
+
+        base_dir =settings.BASE_DIR
+        ai_model = os.path.join(base_dir,Path('smarang_back_app/Ai_data/Brand/Filename.pkl'))
+        model = joblib.load(ai_model) 
+
+        industry = request.data['industry']
+        addr = request.data['addr']
+        req_dict = request.data
+        del(req_dict['industry'])
+        del(req_dict['addr'])
+        
+        df1 = pd.DataFrame(req_dict)
+
+
+        key_list = Modules.B_Key_get(model.predict([df1.loc[0]]))
+
+        marketer = Modules.B_get_M(key_list,addr,industry)
+
+        marketer_list = Modules.Get_marketerlist(marketer)
+        
+        return_list = []
+
+        for x in marketer_list:
+            return_list.append({'마케터_나이':x.marketer_age,'주소':x.marketer_addr,'경력':x.marketer_job,'경력_년수':x.marketer_career,'참여형식':x.marketer_form})
+
+        return Response( return_list,status=status.HTTP_201_CREATED)
 
 class Marketer_getBrand(APIView):
 
     def post(self,request):
+
+        
         
         base_dir =settings.BASE_DIR
-        ai_model = os.path.join(base_dir,Path('smarang_back_app\Ai_data\Marketer\Market.pkl'))
+        ai_model = os.path.join(base_dir,Path('smarang_back_app/Ai_data/Marketer/Market.pkl'))
         model = joblib.load(ai_model) 
 
         region = request.data['region']
@@ -298,6 +331,8 @@ class Marketer_getBrand(APIView):
         request.data['parti'] = Modules.Parti_pont(request.data['parti'])
         
         job =  request.data['job']      
+
+        print(job)
 
         req_dict = request.data
         del(req_dict['job'])
@@ -308,11 +343,15 @@ class Marketer_getBrand(APIView):
 
         brand = Modules.M_get_B(key_list,region,job)
         brand_list = Modules.Get_brandlist(brand)
-        
-        for x in brand_list:
-            print({'기업이름':x.brand_name,'주소':x.brand_addr,'상세업종':x.brand_industry})
 
-        return Response( status=status.HTTP_201_CREATED)
+
+        print(brand_list)
+        return_list = []
+                
+        for x in brand_list:
+            return_list.append({'기업이름':x.brand_name,'주소':x.brand_addr,'상세업종':x.brand_industry})
+
+        return Response(return_list, status=status.HTTP_201_CREATED)
 
 class Brand_getgrade(APIView):
 
