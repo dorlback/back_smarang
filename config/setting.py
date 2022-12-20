@@ -55,6 +55,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://43.200.140.62",
     "http://43.200.140.62:3000",
     "http://43.200.140.62:80",
+    "http://smarnagtest.duckdns.org"
     
 ]
 
