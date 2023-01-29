@@ -26,7 +26,7 @@ model = RandomForestClassifier(max_depth = 80,
                                min_samples_leaf = 1,
                                min_samples_split = 3,
                                n_estimators = 500)
-
+            
 model.fit(x_train, y_train)
 
 joblib.dump(model, 'Market.pkl') 
@@ -40,15 +40,3 @@ y_pred = model.predict(x_test)
 print('검증 정확도 : '+ str(int(accuracy_score(y_test, y_pred)*100))+' %')
 
 print(classification_report(y_pred, y_test))
-
-
-
-
-
-
-
-
-
-
-
-

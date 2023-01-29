@@ -20,9 +20,11 @@ SECRET_KEY = 'django-insecure-$we$-mg8#-cy*tydg#au_%)qr=%oc_q1-*q6$!d2@_%rkgzlwp
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1','43.200.140.62','172.31.36.211','smarnagtest.duckdns.org','http://43.200.140.62']
+ALLOWED_HOSTS = ['localhost','127.0.0.1','43.200.140.62','172.31.36.211','smarnagtest.duckdns.org','http://43.200.140.62','smarang.com']
 # Application definition
 
+SESSION_COOKIE_AGE = 1200
+SESSION_SAVE_EVERY_REQUEST = True
 
 INSTALLED_APPS = [
     'corsheaders',
@@ -32,11 +34,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'ckeditor',
+    'ckeditor_uploader',
     'rest_framework', 
     'smarang_back_app',   
 ]
 
-
+AUTH_USER_MODEL = 'smarang_back_app.User'  # <myapp_name>.<user_model_name>
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -55,11 +59,14 @@ CORS_ALLOWED_ORIGINS = [
     "http://43.200.140.62",
     "http://43.200.140.62:3000",
     "http://43.200.140.62:80",
-    "http://smarnagtest.duckdns.org"
-    
+    "http://smarnagtest.duckdns.org",
+    "http://localhost:3000",    
 ]
 
+
 ROOT_URLCONF = 'config.urls'
+
+
 
 TEMPLATES = [
     {
@@ -77,6 +84,8 @@ TEMPLATES = [
     },
 ]
 
+
+
 WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
@@ -89,7 +98,7 @@ DATABASES = {
     }
 }
 
-
+    
 
 # DATABASES = {
 #     'default': {
@@ -143,4 +152,12 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 
+
+
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_IMAGE_BACKEND = "pillow" 
+CKEDITOR_FILENAME_GENERATOR = 'utils.get_filename'
+AWS_QUERYSTRING_AUTH = False

@@ -182,7 +182,7 @@ person_list = []
 
 
 
-for x in range(100000):
+for x in range(10000):
     person_list.append(
     {
     'age' : ran.choice(age_cate),
