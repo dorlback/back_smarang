@@ -61,7 +61,9 @@ CORS_ALLOWED_ORIGINS = [
     "http://43.200.140.62:80",
     "http://smarnagtest.duckdns.org",
     "http://localhost:3000",   
-    "smarang.com", 
+    "http://smarang.com", 
+    "http://smarang.com:8000", 
+    "http://smarang.com:3000", 
 
 ]
 
