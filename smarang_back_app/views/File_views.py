@@ -56,9 +56,32 @@ class POST_get(APIView):
         img_list = []
 
         for x in post:
-            img_list.append('/media/'+str(x.photo))
+            img_list.append({'url': '/media/'+str(x.photo),'id': x.id})
+                
+        
+        return Response(img_list, status=status.HTTP_201_CREATED)
+
+class Delete_img(APIView):
+
+    def post(self,request):
+        
+        id = request.data['id']
+        perform_id = request.data['perform_id']
+
+        img = POST.objects.get(pk = id)
+
+        img.delete()
+
+        perform_id = Perform_data.objects.get(pk = perform_id)
+
+        post =POST.objects.filter(perform_id = perform_id)
+        
+        img_list = []
+
+        for x in post:
+            img_list.append({'url': '/media/'+str(x.photo),'id': x.id})
+
 
         
-        
-        
+
         return Response(img_list, status=status.HTTP_201_CREATED)

@@ -28,27 +28,48 @@ class Button_data_get(APIView):
 
         id = request.data['id']
 
-        button_con = Button_con.objects.get(perform_id = id)
-        button_status = Button_status.objects.filter(button_id= button_con)
-        radios = []
-        for x in button_status:
-            radios.append({ 'name': x.title, 'value': x.value,'color': x.color })
-            if x.title == button_con.button_state:
-                button_status=x.value
+        cate = request.data['cate']
         
-        data={
-            'memo': button_con.memo,
-            'radios':radios,
-            'status':str(button_status)
-        }
+        perform_id = Perform_data.objects.get(pk = id)
 
+ 
+
+        if(cate == 'brand'):
+            button_con = Button_con.objects.get(perform_id = id)
+            button_status = Button_status.objects.filter(button_id= button_con)
+            radios = []
+            for x in button_status:
+                radios.append({ 'name': x.title, 'value': x.value,'color': x.color })
+                if x.title == button_con.button_state:
+                    button_status=x.value
+            
+            data={
+                'memo': button_con.memo,
+                'radios':radios,
+                'status':str(button_status)
+            }
+        else:
+            print('hi')
+            button_con = Button_con.objects.get(perform_id = perform_id)
+            button_status = Button_status.objects.filter(button_id= button_con)
+            radios = []
+            for x in button_status:
+                if(x.title=='반려' or x.title=='보안완료'):
+                    radios.append({ 'name': x.title, 'value': x.value,'color': x.color })
+                    if x.title == button_con.button_state:
+                        button_status=x.value
+            
+            data={
+                'memo': button_con.memo,
+                'radios':radios,
+                'status':str(button_status)
+            }
         
         return Response(data, status=status.HTTP_201_CREATED)
 
 class Button_data_save(APIView):
 
     def post(self,request):
-
   
         id = request.data['id']
 
@@ -78,7 +99,6 @@ class Button_data_save(APIView):
         button_con.button_state = button_status
         button_con.memo = memo
         button_con.save()
-        
 
         
 

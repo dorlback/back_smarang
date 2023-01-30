@@ -295,6 +295,7 @@ class Item_list_get_view(APIView):
             list.insert(1, '대리점')
             list.insert(2, '등록일')
             list.append( '정산')
+            list.append( '수정')
           
     
             
@@ -371,6 +372,7 @@ class Item_list_get_search_view(APIView):
             list.insert(1, '대리점')
             list.insert(2, '등록일')
             list.append( '정산')
+            list.append( '수정')
           
     
             
@@ -491,6 +493,7 @@ class Item_list_get_view_m(APIView):
                 list.insert(1, '대리점')
                 list.insert(2, '등록일')
                 list.append( '정산')
+                list.append( '수정')
             
 
                 
@@ -554,6 +557,16 @@ class Item_list_get_view_m(APIView):
             }
         return Response( data,status=status.HTTP_201_CREATED)
 
+class Item_perform_del(APIView):    
+    def post(self,request):
+
+        id = request.data['id']
+
+        perform = Perform_data.objects.get(pk = id)
+
+        perform.delete()
+
+        return Response( status=status.HTTP_201_CREATED)
 
 class Item_list_get_view_search_m(APIView):    
 
@@ -588,6 +601,7 @@ class Item_list_get_view_search_m(APIView):
                 list.insert(1, '대리점')
                 list.insert(2, '등록일')
                 list.append( '정산')
+                list.append( '수정')
             
 
                 
@@ -747,6 +761,8 @@ class Submit_perform_m(APIView):
 
         print(data_list)
 
+
+
         for x in data_list:
             Perform_list.objects.create(
                 Perform_id=perform,
@@ -754,6 +770,38 @@ class Submit_perform_m(APIView):
                 data=(list(x.values())[0]),
             )
 
+
+        button_con = Button_con.objects.create(
+            perform_id = perform,
+        )
+
+        Button_status.objects.create(
+            button_id = button_con,
+            title = '대기',
+            color = 'outline-warning',
+            value = 0
+        )
+
+        Button_status.objects.create(
+            button_id = button_con,
+            title = '승인',
+            color = 'outline-success',
+            value = 1
+        )
+
+        Button_status.objects.create(
+            button_id = button_con,
+            title = '반려',
+            color = 'outline-danger',
+            value = 2
+        )
+
+        Button_status.objects.create(
+            button_id = button_con,
+            title = '보안완료',
+            color = 'outline-warning',
+            value = 3
+        )
 
 
         return Response( status=status.HTTP_201_CREATED)
@@ -820,7 +868,7 @@ class User_data_edit(APIView):
             user.phoneNumber = data[1]
             user.user_id.name = data[2]
             user.buisnessNumber = data[3]
-
+            
             user.user_id.save()
             user.save()
 

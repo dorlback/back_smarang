@@ -39,7 +39,7 @@ class Check_sms(APIView):
         phone_num = request.data['phone_number']
         phone_num =phone_num.replace("-","")
 
-        
+
         print(phone_num)
         randnum = ran.randint(1000, 10000)        
         self = AuthSMS.objects
@@ -47,7 +47,7 @@ class Check_sms(APIView):
         AuthSMS.objects.update_or_create(phone_number=phone_num)
         return Response( status=status.HTTP_201_CREATED)
         
-
+        
 
         # timestamp = int(time.time() * 1000)
         # timestamp = str(timestamp)

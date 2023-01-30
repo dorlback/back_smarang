@@ -204,7 +204,7 @@ class Modules():
                     )
             value=value-1
 
-   
+        
 
         list_id = []
         list_value = []
@@ -213,6 +213,8 @@ class Modules():
 
         list_match = []
         m_list =[]
+
+    
 
         for x in val_list:
 
@@ -224,7 +226,7 @@ class Modules():
         count = 0
         overlap= 0
 
-
+        
 
         for x in list_id:
             if x not in list_match:
@@ -234,31 +236,19 @@ class Modules():
                     'value':list_value[count],
                     'pow':list_pow[count]                
                 })
-            elif x in list_match:
-                overlap = overlap+1
-
-                for x in m_list:
-                    if x['id']==list_id[count]:
-                        x['value'] = x['value']+list_value[count]
             
             count = count+1
 
         marketer= []
 
+        
+
+
         m_list = sorted(m_list, key=(lambda x: x['value']),reverse=True)
-
-
-
-        for x in m_list:
-            if x['value'] == m_list[0]['value']:
-
-                marketer.append(m_list[0])
         
         
 
-        marketer = sorted(marketer, key=(lambda x: x['pow']),reverse=True)
-        
-        return(marketer[0:10])
+        return(m_list[0:10])
 
 
 
@@ -282,10 +272,11 @@ class Modules():
             marketer_data = get_object_or_404(Marketer, pk=x['id'])
             marketer_list.append(marketer_data)
 
+
+     
         return(marketer_list)
 
         
-
 
 class Ai_test(APIView):
 
@@ -422,7 +413,14 @@ class Marketer_create_data(APIView):
 
     def post(self,request):
 
+        mark = Marketer.objects.all()
 
+        list = []
+        for x in mark:
+            if x.marketer_addr == '서울':
+                list.append(x)
+
+        print(list)
 
 
         return Response( status=status.HTTP_201_CREATED)

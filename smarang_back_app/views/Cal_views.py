@@ -233,7 +233,12 @@ class Cal_create_get_list(APIView):
         
         perform = Perform_data.objects.get(pk = id)
 
-        perform.cal_id.date_joined
+
+        try:
+            data = perform.cal_id.date_joined
+        except:
+            data = '정산 대기중'
         
         
-        return Response(perform.cal_id.date_joined, status=status.HTTP_201_CREATED)
+
+        return Response(data, status=status.HTTP_201_CREATED)
