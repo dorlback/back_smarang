@@ -20,13 +20,14 @@ class UserManager(BaseUserManager):
     
     use_in_migrations = True    
     
-    def create_user(self, email, nickname, password):        
+    def create_user(self, email, nickname, password,name):        
         
         if not email :            
             raise ValueError('must have user email')        
         user = self.model(            
             email = self.normalize_email(email),            
-            nickname = nickname        
+            nickname = nickname     ,  
+            name = name 
         )        
         user.set_password(password)        
         user.save(using=self._db)        
@@ -241,6 +242,7 @@ class AuthSMS(TimeStampedModel):
 
     @classmethod
     def check_auth_number(cls, p_num, c_num):
+        print(c_num)
         time_limit = timezone.now() - datetime.timedelta(minutes=3)
         result = cls.objects.filter(
             phone_number=p_num,
