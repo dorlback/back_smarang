@@ -794,7 +794,7 @@ class Submit_perform_m(APIView):
 
         Button_status.objects.create(
             button_id = button_con,
-            title = '보안완료',
+            title = '보완완료',
             color = 'outline-warning',
             value = 3
         )

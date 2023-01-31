@@ -240,5 +240,5 @@ class Cal_create_get_list(APIView):
             data = '정산 대기중'
         
         
-
+        
         return Response(data, status=status.HTTP_201_CREATED)

@@ -60,7 +60,7 @@ class Button_data_get(APIView):
 
             if(button_con.button_state == '반려'):
                 for x in button_status:
-                    if(x.title=='반려' or x.title=='보안완료'):
+                    if(x.title=='반려' or x.title=='보완완료'):
                         radios.append({ 'name': x.title, 'value': x.value,'color': x.color })
                         if x.title == button_con.button_state:
                             button_status=x.value
