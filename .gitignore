@@ -6,4 +6,8 @@
 
 /smarang_back_app/views/__pycache__
 
+/config/__pycache__
+
+/smarang_back_app/migrations/__pycache__
+
 db.sqlite3
