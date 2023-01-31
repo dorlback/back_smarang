@@ -2,8 +2,8 @@
 
 /smarang_back_app/Ai_data/Marketer/Market.pkl
 
-/smarang_back_app/__pycache__/
+/smarang_back_app/__pycache__
 
-/smarang_back_app/views/__pycache__/
+/smarang_back_app/views/__pycache__
 
-/db.sqlite3
+db.sqlite3
