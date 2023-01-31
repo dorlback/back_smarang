@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
 from .views.Ai_views import Ai_test,Marketer_getgrade,Brand_getgrade,Marketer_getBrand,Brand_getMarketer,Marketer_create_data,Ai_delete
-from .views.Test_views import Item_perform_del,Marketer_list_search_get,Item_list_get_view_search_m,Item_list_get_search_view,Terms_data,User_create,Edit_data,Memo_edit,Get_memo,Get_data,Marketer_create,User_data_edit,Login_view,Item_list_get_view,Item_list_get_select_view_m,User_data_get,Submit_perform_m,Item_list_get_view_m,Brand_create,Marketer_subscribe_create,Marketer_Market_list,Marketer_list_get,Marketer_state_change
+from .views.Test_views import Region_change,Item_perform_del,Marketer_list_search_get,Item_list_get_view_search_m,Item_list_get_search_view,Terms_data,User_create,Edit_data,Memo_edit,Get_memo,Get_data,Marketer_create,User_data_edit,Login_view,Item_list_get_view,Item_list_get_select_view_m,User_data_get,Submit_perform_m,Item_list_get_view_m,Brand_create,Marketer_subscribe_create,Marketer_Market_list,Marketer_list_get,Marketer_state_change
 from .views.Sms_views import Check_sms
 from .views.Cal_views import Cal_create_get_list,Cal_create_get_p_inner,Cal_data_get_p_inner,Cal_data_get,Cal_data_list_get,Cal_data_get_p,Cal_innder_list_get,Cal_inner_data_create,Cal_inner_data_edit,Handle_edit_cal_inner,Cal_create
 from .views.Review_views import Button_data_get,Button_data_save
@@ -43,6 +43,9 @@ urlpatterns = [
     path('get_memo/',Get_memo.as_view()),
     path('get_data/',Get_data.as_view()),
     path('edit_data/',Edit_data.as_view()),
+
+    path('region_change/',Region_change.as_view()),
+    
 
     path('user_data_edit/',User_data_edit.as_view()),
     

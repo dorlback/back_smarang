@@ -275,7 +275,7 @@ class Perform_data(models.Model):
     Marketer_id = models.ForeignKey("Marketer_user",related_name='Marketer_user',on_delete=models.CASCADE)
     memo = models.TextField(null=True,blank=True)
 
-
+    
 
 class UploadFileModel(models.Model):
     perform_id = models.ForeignKey("Perform_data",related_name='perform_id_file',on_delete=models.CASCADE)

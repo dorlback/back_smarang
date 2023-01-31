@@ -37,13 +37,11 @@ class User_create(APIView):
 
         return Response( status=status.HTTP_201_CREATED)
         
-
+        
 
 class Marketer_create(APIView):
 
     def post(self,request):
-        
-
 
         user = UserManager.create_user(
             self=User.objects,
@@ -311,7 +309,7 @@ class Item_list_get_view(APIView):
                     per_data = Perform_list.objects.filter(Perform_id = x.id)
                     for y in per_data:
                         per_list.append({y.title:y.data})
-                    per_list.insert(0,{'marketer':[x.Marketer_id.user_id.email,'']})
+                    per_list.insert(0,{'marketer':[x.Marketer_id.user_id.name,'']})
                     per_list.insert(1,{'created_date':x.created_at})
 
                     perfrom_data_data={
@@ -433,7 +431,7 @@ class Item_list_get_search_view(APIView):
                     per_data = Perform_list.objects.filter(Perform_id = x.id)
                     for y in per_data:
                         per_list.append({y.title:y.data})
-                    per_list.insert(0,{'marketer':[x.Marketer_id.user_id.email,'']})
+                    per_list.insert(0,{'marketer':[x.Marketer_id.user_id.name,'']})
                     per_list.insert(1,{'created_date':x.created_at})
 
                     perfrom_data_data={
@@ -511,7 +509,7 @@ class Item_list_get_view_m(APIView):
                     per_data = Perform_list.objects.filter(Perform_id = x.id)
                     for y in per_data:
                         per_list.append({y.title:y.data})
-                    per_list.insert(0,{'marketer':[x.Marketer_id.user_id.email,'']})
+                    per_list.insert(0,{'marketer':[x.Marketer_id.user_id.name,'']})
                     per_list.insert(1,{'created_date':x.created_at})
 
                     perfrom_data_data={
@@ -665,7 +663,7 @@ class Item_list_get_view_search_m(APIView):
                     for y in per_data:
                         per_list.append({y.title:y.data})
 
-                    per_list.insert(0,{'marketer':[x.Marketer_id.user_id.email,'']})
+                    per_list.insert(0,{'marketer':[x.Marketer_id.user_id.name,'']})
                     per_list.insert(1,{'created_date':x.created_at})
 
 
@@ -748,20 +746,18 @@ class Submit_perform_m(APIView):
     def post(self,request):
 
         item_url = request.data['url']
+        memo = request.data['memo']
         data_list = request.data['data_list']
         user_id =  Marketer_user.objects.get(user_id = User.objects.get(email = request.data['user']))
         item_id = Items.objects.get(Item_url = item_url)
 
-        
+        print(memo)
 
         perform = Perform_data.objects.create(
             Item_id_per=item_id,
-            Marketer_id=user_id
+            Marketer_id=user_id,
+            memo=memo
         )
-
-        print(data_list)
-
-
 
         for x in data_list:
             Perform_list.objects.create(
@@ -868,7 +864,7 @@ class User_data_edit(APIView):
             user.phoneNumber = data[1]
             user.user_id.name = data[2]
             user.buisnessNumber = data[3]
-            
+
             user.user_id.save()
             user.save()
 
@@ -883,10 +879,17 @@ class Get_memo(APIView):
 
         pd = Perform_data.objects.get(pk = id)        
         
+        pl = Perform_list.objects.filter(Perform_id = pd)
 
+        memo = ''
 
+        for x in pl :
+            if x.title == 'memo':
+                memo = x.data
 
-        return Response( pd.memo,status=status.HTTP_201_CREATED)
+        print(pd.memo)
+
+        return Response( memo,status=status.HTTP_201_CREATED)
 
 class Memo_edit(APIView):
 
@@ -895,10 +898,14 @@ class Memo_edit(APIView):
         id = request.data['id']
         memo = request.data['memo']
 
-        pd = Perform_data.objects.get(pk = id)        
-        pd.memo = memo
+        pd = Perform_data.objects.get(pk = id)       
 
-        print(pd.memo)
+        pl = Perform_list.objects.filter(Perform_id = pd)
+
+        for x in pl :
+            if x.title == 'memo':
+                x.data = memo
+                x.save()
 
         return Response( status=status.HTTP_201_CREATED)
 
@@ -959,3 +966,21 @@ class Terms_data(APIView):
         
 
         return Response( data, status=status.HTTP_201_CREATED)
+
+class Region_change(APIView):
+
+    def post(self,request):
+
+        id = request.data['id']
+        region = request.data['region']
+
+        perform = Perform_data.objects.get(pk = id)
+        
+        perform_list = Perform_list.objects.filter(Perform_id = perform)
+
+        for x in perform_list:
+            if x.title == 'region':
+                x.data = region
+                x.save()
+
+        return Response( status=status.HTTP_201_CREATED)
