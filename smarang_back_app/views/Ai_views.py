@@ -87,7 +87,7 @@ class Modules():
             brand_list = Brand.objects.filter(brand_addr__contains= region)
 
         
-        
+          
 
         
         print('M_get_B1')
