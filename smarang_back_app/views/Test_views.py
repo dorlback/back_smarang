@@ -916,21 +916,18 @@ class Get_data(APIView):
         id = request.data['id']
      
 
+
         pd = Perform_data.objects.get(pk = id)        
         pl = Perform_list.objects.filter(Perform_id =pd)
-
-         
 
         for x in pl:
             if x.title == 'data':
                 r_data = x.data
 
-     
-
         return Response( r_data,status=status.HTTP_201_CREATED)
 
 class Edit_data(APIView):
-
+    
     def post(self,request):
 
         id = request.data['id']
@@ -939,17 +936,14 @@ class Edit_data(APIView):
         pd = Perform_data.objects.get(pk = id)        
         pl = Perform_list.objects.filter(Perform_id =pd)
 
-         
-
         for x in pl:
             if x.title == 'data':
                 x.data = data
 
-                x.save()
-
-     
+                x.save() 
 
         return Response( status=status.HTTP_201_CREATED)
+
 
 
 class Terms_data(APIView):

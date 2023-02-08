@@ -131,17 +131,6 @@ class Brand(models.Model):
     brand_Needs = models.CharField(max_length=50) #니즈지수
     brand_grade = models.CharField(max_length=50) #등급
 
-class Test(models.Model):
-    marketer_age = models.CharField(max_length=50) #나이
-    marketer_addr = models.CharField(max_length=50) #지역
-    marketer_job = models.CharField(max_length=50) #직업경력
-    marketer_career = models.CharField(max_length=50) #경력년수
-    marketer_form = models.CharField(max_length=50) #참여형식
-    marketer_plat = models.CharField(max_length=50) #플랫폼실적
-    marketer_pow = models.CharField(max_length=50) #마케터파워지수
-    marketer_grade = models.CharField(max_length=50) #등급
-
-
 
 class Marketer(models.Model):
 
@@ -154,6 +143,45 @@ class Marketer(models.Model):
     marketer_pow = models.CharField(max_length=50) #마케터파워지수
     marketer_grade = models.CharField(max_length=50) #등급
 
+class Brand_detail(models.Model):
+    brand_id = models.ForeignKey("Brand_user", related_name='brand_u',on_delete=models.CASCADE)
+    brand_name = models.CharField(max_length=50,blank=True,null=True,) #회사명
+    brand_addr = models.CharField(max_length=50) #주소
+    brand_date = models.CharField(max_length=50) #설립일
+    # brand_scale = models.CharField(max_length=50) #기업규모
+    # brand_shape = models.CharField(max_length=50) #기업형태
+    brand_price = models.CharField(max_length=50) #매출액
+    brand_profit = models.CharField(max_length=50) #영업이익
+    # brand_profit_loss = models.CharField(max_length=50) #당기손익
+    # brand_credit_grade = models.CharField(max_length=50) #신용등급
+    brand_credit_grade_score = models.CharField(max_length=50) #신용등급_점수
+    brand_employees = models.CharField(max_length=50) #사원수
+    brand_industry = models.CharField(max_length=50) #상세업종
+    # brand_Needs = models.CharField(max_length=50) #니즈지수
+    # brand_grade = models.CharField(max_length=50) #등급
+
+
+
+class Marketer_detail(models.Model):
+    marketer_id = models.ForeignKey("Marketer_user", related_name='marketer_u',on_delete=models.CASCADE)
+    marketer_age = models.CharField(max_length=50) #나이
+    marketer_addr = models.CharField(max_length=50) #지역
+    marketer_job = models.CharField(max_length=50) #회사업종
+    marketer_career = models.CharField(max_length=50) #경력년수
+    marketer_form = models.CharField(max_length=50) #참여형식
+    marketer_plat = models.CharField(max_length=50) #플랫폼실적
+
+
+
+class Test(models.Model):
+    marketer_age = models.CharField(max_length=50) #나이
+    marketer_addr = models.CharField(max_length=50) #지역
+    marketer_job = models.CharField(max_length=50) #직업경력
+    marketer_career = models.CharField(max_length=50) #경력년수
+    marketer_form = models.CharField(max_length=50) #참여형식
+    marketer_plat = models.CharField(max_length=50) #플랫폼실적
+    marketer_pow = models.CharField(max_length=50) #마케터파워지수
+    marketer_grade = models.CharField(max_length=50) #등급
 
 class Item_succ(models.Model):
 
@@ -321,8 +349,6 @@ class POST(models.Model):
 	# (2) 저장경로 : MEDIA_ROOT/blog/post/20210901/xxx.png
     	#     DB필드 :  'MEDIA_URL/blog/post/20210901/xxx.png' 문자열 저장
 	
-
-
 
 class Notice(models.Model):
     notice_title = models.CharField(max_length=50)

@@ -75,7 +75,7 @@ class Modules():
         if grade == ['D등급']:
             return D_list
 
-    
+
 
     def M_get_B(ket_list,region,job):
 
@@ -87,7 +87,7 @@ class Modules():
             brand_list = Brand.objects.filter(brand_addr__contains= region)
 
         
-
+        
 
         
         print('M_get_B1')
@@ -348,6 +348,8 @@ class Brand_getMarketer(APIView):
 
             return Response(return_list,status=status.HTTP_201_CREATED)
 
+
+
 class Marketer_getBrand(APIView):
 
     def post(self,request):
@@ -365,7 +367,7 @@ class Marketer_getBrand(APIView):
             job =  request.data['job']      
 
             print(job)
-
+            
             req_dict = request.data
             del(req_dict['job'])
             
