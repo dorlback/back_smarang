@@ -10,7 +10,6 @@ from .views.Notice_views import Notice_data_get,Notice_inner_get
 from . import views
 
 
-
 urlpatterns = [
     path('Ai_data/',Ai_test.as_view()),   
     path('M_grade/',Marketer_getgrade.as_view()), 
