@@ -12,5 +12,9 @@
 
 ./smarang_back_app/migrations/__pycache__
 
+__pycache__/
+
+*.py[cod]
+
 db.sqlite3
 .venv
