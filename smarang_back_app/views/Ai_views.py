@@ -503,9 +503,10 @@ class Ai_delete(APIView):
         brand = Brand.objects.filter(ver_id = 1)
 
         for x in brand:
-            x.updated_time = date(2022,2,7)
+            x.updated_time = date(2023,1,20)
             x.save()
 
+        
         
 
         # i = 0
