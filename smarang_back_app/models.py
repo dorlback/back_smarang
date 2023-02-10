@@ -133,6 +133,7 @@ class BrandAbstract(models.Model):
     class Meta:
         abstract = True
         
+    
 
 class Brand(BrandAbstract):
     updated_time = models.DateField(auto_now=False)
