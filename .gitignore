@@ -1,3 +1,6 @@
+__pycache__/
+*.py[cod]
+
 /smarang_back_app/Ai_data/Brand/Filename.pkl
 
 /smarang_back_app/Ai_data/Marketer/Market.pkl
@@ -6,15 +9,16 @@
 
 ./smarang_back_app/views/__pycache__/
 
-./smarang_back_app/__pycache__/
+../smarang_back_app/__pycache__/
 
 ./config/__pycache__
 
-./smarang_back_app/migrations/__pycache__
+../smarang_back_app/migrations/__pycache__/
 
-__pycache__/
+.__pycache__/
 
-*.py[cod]
+.*.py[cod]/
 
 db.sqlite3
 .venv
+
