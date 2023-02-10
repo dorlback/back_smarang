@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from ..models import Test,Marketer,Brand
+from ..models import Test,Marketer,Brand,Brand_raw,Brand_status,Brand_dummy,Ai_version,Brand_back_up
 import pandas as pd
 from django.conf import settings
 import os
@@ -17,6 +17,7 @@ from sklearn.metrics import classification_report
 import warnings
 warnings.filterwarnings('ignore')
 from django.db.models import Q
+from datetime import date
 import joblib
 from rest_framework.generics import get_object_or_404 
 # Create your views here.
@@ -499,29 +500,80 @@ class Ai_delete(APIView):
 
     def post(self,request):
 
-        # data = Brand.objects.all()
+        brand = Brand.objects.filter(ver_id = 1)
 
+        for x in brand:
+            x.updated_time = date(2022,2,7)
+            x.save()
 
-        # brand_list = Brand.objects.all().exclude(Q(brand_addr__contains = '경기')|Q(brand_addr__contains = '서울'))
-
-        # #25186
-        # #25583
-        # #50769
-
-
-        # # print(len(brand_list))
-     
+        
 
         # i = 0
-        # list= []
-        # for x in brand_list:
-        #     if i%10 == 0:
-        #         list.append(x)
-        #     else:
-        #         x.delete()
 
+        # for x in bd:
+        #     Brand.objects.create(
+        #         brand_name = x.brand_id.brand_name,
+        #         brand_addr = x.brand_id.brand_addr,
+        #         brand_date = x.brand_id.brand_date,
+        #         brand_scale = x.brand_id.brand_scale,
+        #         brand_shape = x.brand_id.brand_shape,
+        #         brand_price = x.brand_id.brand_price,
+        #         brand_profit = x.brand_id.brand_profit,
+        #         brand_profit_loss = x.brand_id.brand_profit_loss,
+        #         brand_credit_grade = x.brand_id.brand_credit_grade,
+        #         brand_credit_grade_score = x.brand_id.brand_credit_grade_score,
+        #         brand_employees = x.brand_id.brand_employees,
+        #         brand_industry = x.brand_id.brand_industry,
+        #         brand_Needs = '-',
+        #         brand_grade = '_',
+        #         updated_time = date(2023,1,1),
+        #         ver_id = 2,
+        #     )
         #     i=i+1
 
-          
+        #     print(i)
+
+
+
+        return Response( status=status.HTTP_201_CREATED)
+
+
+
+class Ai_traindata_input(APIView):
+
+    def post(self,request):
+
+        
+
+        print(len(Brand.objects.all()))
+
+        bs = Brand_status.objects.filter(ver_id = 0)
+
+        
+
+        i =0
+
+        for x in bs:
+            Brand.objects.create(
+                brand_name = x.brand_id.brand_name,
+                brand_addr = x.brand_id.brand_addr,
+                brand_date = x.brand_id.brand_date,
+                brand_scale = x.brand_id.brand_scale,
+                brand_shape = x.brand_id.brand_shape,
+                brand_price = x.brand_id.brand_price,
+                brand_profit = x.brand_id.brand_profit,
+                brand_profit_loss = x.brand_id.brand_profit_loss,
+                brand_credit_grade = x.brand_id.brand_credit_grade,
+                brand_credit_grade_score = x.brand_id.brand_credit_grade_score,
+                brand_employees = x.brand_id.brand_employees,
+                brand_industry = x.brand_id.brand_industry,
+                brand_Needs = x.brand_id.brand_Needs,
+                brand_grade = x.brand_id.brand_grade,
+            )
+            i=i+1
+            print(i)
+
+        
+
 
         return Response( status=status.HTTP_201_CREATED)

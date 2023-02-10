@@ -17,9 +17,20 @@ class UserAdmin(admin.ModelAdmin):
         'email',
     )
 
+
+
+
+@admin.register(models.Marketer_detail)
+class Marketer_detai_adminl(admin.ModelAdmin):
+    search_fields = ['marketer_id']
+
+@admin.register(models.Brand_detail)
+class Brand_detail_admin(admin.ModelAdmin):
+    search_fields = ['brand_id']
+
 @admin.register(models.POST)
 class Post_admin(admin.ModelAdmin):
-    search_fields = ['photo']
+    search_fields = ['marketer_addr']
 
 @admin.register(models.Notice)
 class Notice_admin(admin.ModelAdmin):
@@ -32,8 +43,6 @@ class Terms_admin(admin.ModelAdmin):
 @admin.register(models.Brand_user)
 class B_userAdmin(admin.ModelAdmin):
     search_fields = ['phoneNumber']
-
-
 
 class Item_list_line(admin.TabularInline):
     model = models.Item_list

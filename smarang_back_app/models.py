@@ -86,7 +86,7 @@ class User(AbstractBaseUser,PermissionsMixin):
         null=True,
     )  
     password = models.CharField(
-        max_length=20,
+        max_length=100,
         null=False,
         unique=False
     )
@@ -113,9 +113,8 @@ class Marketer_user(models.Model):
     phoneNumberRegex = RegexValidator(regex = r"^\+?1?\d{8,15}$")
     phoneNumber = models.CharField(validators = [phoneNumberRegex], max_length = 16, unique = False)
 
-    
 
-class Brand(models.Model):
+class BrandAbstract(models.Model):
     brand_name = models.CharField(max_length=50,blank=True,null=True,) #회사명
     brand_addr = models.CharField(max_length=50) #주소
     brand_date = models.CharField(max_length=50) #설립일
@@ -129,8 +128,38 @@ class Brand(models.Model):
     brand_employees = models.CharField(max_length=50) #사원수
     brand_industry = models.CharField(max_length=50) #상세업종
     brand_Needs = models.CharField(max_length=50) #니즈지수
-    brand_grade = models.CharField(max_length=50) #등급
+    brand_grade = models.CharField(max_length=50) #등급    
 
+    class Meta:
+        abstract = True
+        
+
+class Brand(BrandAbstract):
+    updated_time = models.DateField(auto_now=False)
+    ver_id = models.IntegerField(default=-1)
+
+
+
+class Brand_status(models.Model):
+    brand_id = models.ForeignKey("Brand_raw", related_name="brand_id_d", on_delete=models.CASCADE)
+    ver_id = models.IntegerField(default=-1)
+
+class Brand_dummy(models.Model):
+    brand_id = models.ForeignKey("Brand_raw", related_name="brand_id", on_delete=models.CASCADE)
+
+
+class Ai_version(models.Model):
+    ver_name = models.CharField(max_length=50) #나이
+    ver_id = models.IntegerField()
+    updated_time = models.DateField(auto_now=True)
+
+
+class Brand_raw(BrandAbstract):
+    pass
+
+
+class Brand_back_up(BrandAbstract):
+    pass
 
 class Marketer(models.Model):
 
@@ -148,29 +177,22 @@ class Brand_detail(models.Model):
     brand_name = models.CharField(max_length=50,blank=True,null=True,) #회사명
     brand_addr = models.CharField(max_length=50) #주소
     brand_date = models.CharField(max_length=50) #설립일
-    # brand_scale = models.CharField(max_length=50) #기업규모
-    # brand_shape = models.CharField(max_length=50) #기업형태
     brand_price = models.CharField(max_length=50) #매출액
     brand_profit = models.CharField(max_length=50) #영업이익
-    # brand_profit_loss = models.CharField(max_length=50) #당기손익
-    # brand_credit_grade = models.CharField(max_length=50) #신용등급
     brand_credit_grade_score = models.CharField(max_length=50) #신용등급_점수
     brand_employees = models.CharField(max_length=50) #사원수
     brand_industry = models.CharField(max_length=50) #상세업종
-    # brand_Needs = models.CharField(max_length=50) #니즈지수
-    # brand_grade = models.CharField(max_length=50) #등급
 
 
 
 class Marketer_detail(models.Model):
     marketer_id = models.ForeignKey("Marketer_user", related_name='marketer_u',on_delete=models.CASCADE)
-    marketer_age = models.CharField(max_length=50) #나이
-    marketer_addr = models.CharField(max_length=50) #지역
-    marketer_job = models.CharField(max_length=50) #회사업종
-    marketer_career = models.CharField(max_length=50) #경력년수
-    marketer_form = models.CharField(max_length=50) #참여형식
-    marketer_plat = models.CharField(max_length=50) #플랫폼실적
-
+    marketer_age = models.CharField(max_length=50,null=True,blank=True) #나이
+    marketer_addr = models.CharField(max_length=50,null=True,blank=True) #지역
+    marketer_job = models.CharField(max_length=50,null=True,blank=True) #회사업종
+    marketer_career = models.CharField(max_length=50,null=True,blank=True) #경력년수
+    marketer_form = models.CharField(max_length=50,null=True,blank=True) #참여형식
+    marketer_plat = models.CharField(max_length=50,null=True,blank=True) #플랫폼실적
 
 
 class Test(models.Model):

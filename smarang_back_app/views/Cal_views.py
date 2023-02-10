@@ -30,8 +30,6 @@ class Cal_data_get(APIView):
 
         Item_data = Items.objects.filter(Brand_user_id=Brand_user.objects.get(user_id = User.objects.get(nickname = email)))
 
-     
-
         url_list = []
 
         for x in Item_data:
@@ -238,7 +236,5 @@ class Cal_create_get_list(APIView):
             data = perform.cal_id.date_joined
         except:
             data = '정산 대기중'
-        
-        
         
         return Response(data, status=status.HTTP_201_CREATED)

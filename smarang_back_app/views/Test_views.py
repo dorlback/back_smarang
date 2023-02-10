@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from ..models import Test,Marketer,Brand,Terms,User,UserManager,Marketer_user,Brand_user,Button_con,Cal_table,Button_status,Marketer_user,Cal_data,AuthSMS,Items,Item_list,Perform_data,Perform_list,Item_succ
+from ..models import Ai_version,Brand_detail,Marketer_detail,Test,Marketer,Brand,Brand_status,Brand_dummy,Terms,User,UserManager,Marketer_user,Brand_user,Button_con,Cal_table,Button_status,Marketer_user,Cal_data,AuthSMS,Items,Item_list,Perform_data,Perform_list,Brand_raw,Item_succ
 import pandas as pd
 from django.conf import settings
 import os
@@ -51,11 +51,16 @@ class Marketer_create(APIView):
             name = request.data['name']
         )
 
-        Marketer_user.objects.create(
+        m_user = Marketer_user.objects.create(
             user_id = user,
             phoneNumber= request.data['phone_number'].replace("-",""),
         )
         
+        Marketer_detail.objects.create(
+            marketer_id=m_user
+
+        )
+
         return Response( status=status.HTTP_201_CREATED)   
 
         
@@ -65,15 +70,29 @@ class Marketer_subscribe_create(APIView):
     def post(self,request):
         
         email = request.data['email']
-        print(email)
 
-        applicate = Item_succ.objects.create(
-            Marketer_id = Marketer_user.objects.get(user_id = User.objects.get(email = email)),
-            Item_title = 'SCRM',
-            Item_id_per = Items.objects.get(Item_title='SCRM')
-        )
-        
-        return Response( status=status.HTTP_201_CREATED)  
+        user = Marketer_user.objects.get(user_id = User.objects.get(email = email))
+
+        m_user = Marketer_detail.objects.get(marketer_id = user)
+
+
+
+        if (m_user.marketer_age != '' and m_user.marketer_age != None) and (m_user.marketer_addr != '' and m_user.marketer_addr != None) and (m_user.marketer_job != '' and m_user.marketer_job != None) and (m_user.marketer_career != '' and m_user.marketer_career != None) and (m_user.marketer_form != '' and m_user.marketer_form != None) and (m_user.marketer_plat != '' and m_user.marketer_plat != None):
+
+            print(m_user.marketer_age)
+
+            applicate = Item_succ.objects.create(
+                Marketer_id = Marketer_user.objects.get(user_id = User.objects.get(email = email)),
+                Item_title = 'SCRM',
+                Item_id_per = Items.objects.get(Item_title='SCRM')
+            )
+
+            data={'succ'}
+        else:
+            
+            data={'no_detail'}
+
+        return Response( data,status=status.HTTP_201_CREATED)  
 
                                                                                          
 class Marketer_list_get(APIView):
@@ -193,11 +212,47 @@ class Brand_create(APIView):
             name = request.data['name']
         )
 
-        Brand_user.objects.create( 
+        b_user = Brand_user.objects.create( 
             user_id = user,
             phoneNumber= request.data['phone_number'].replace("-",""),
             buisnessNumber = request.data['buisnessNumber']
         )
+        Brand_detail.objects.create(
+
+            brand_id = b_user,
+            brand_name = request.data['brand_name'] ,
+            brand_addr = request.data['brand_addr'],
+            brand_date = request.data['brand_date'],
+            brand_price = request.data['brand_price'],
+            brand_profit = request.data['brand_profit'],
+            brand_credit_grade_score = request.data['brand_credit_grade_score'],
+            brand_employees = request.data['brand_employees'],
+            brand_industry = request.data['brand_industry']
+
+        )
+        br = Brand_raw.objects.create(
+                brand_name = request.data['brand_name'] ,
+                brand_addr = request.data['brand_addr'],
+                brand_date = request.data['brand_date'],
+                brand_scale = '',
+                brand_shape = '',
+                brand_price = request.data['brand_price'],
+                brand_profit = request.data['brand_profit'],
+                brand_profit_loss = '',
+                brand_credit_grade = '',
+                brand_credit_grade_score = request.data['brand_credit_grade_score'],
+                brand_employees =  request.data['brand_employees'],
+                brand_industry = request.data['brand_industry'],
+                brand_Needs = '',
+                brand_grade = '',
+        )
+        bs = Brand_status.objects.create(
+                brand_id = br,
+        )
+        Brand_dummy.objects.create(
+            brand_id =bs
+        )
+
         
         return Response( status=status.HTTP_201_CREATED) 
 
@@ -799,27 +854,24 @@ class Submit_perform_m(APIView):
             value = 3
         )
 
-
         return Response( status=status.HTTP_201_CREATED)
 
 class User_data_get(APIView):
-
+        
     def post(self,request):
-
+        
         email = request.data['email']
         
         data_list = []
         try:
             user = Marketer_user.objects.get(user_id = User.objects.get(email = email))
-            
-                                    
 
             data_list=[
-   
+            
             ['이메일',user.user_id.email],
         
             ['전화번호',user.phoneNumber],
-         
+
             ['이름',user.user_id.name]
             ]
         except:
@@ -840,6 +892,103 @@ class User_data_get(APIView):
 
         return Response(data_list, status=status.HTTP_201_CREATED)
 
+class Marketer_is_data(APIView):
+
+    def post(self,request):
+        
+        email = request.data['email']
+        
+        data_list = []
+
+        user = Marketer_user.objects.get(user_id = User.objects.get(email = email))            
+        m_user = Marketer_detail.objects.get(marketer_id = user)
+
+        if(m_user.marketer_age != None and m_user.marketer_addr != None and m_user.marketer_job != None and m_user.marketer_career != None and m_user.marketer_form != None and m_user.marketer_plat != None):
+    
+            data_list=[
+                ['나이',m_user.marketer_age],
+                ['지역',m_user.marketer_addr],
+                ['회사업종',m_user.marketer_job],
+                ['경력 년수',m_user.marketer_career],
+                ['참여 형식',m_user.marketer_form],
+                ['플랫폼 실적',m_user.marketer_plat],
+            ]
+    
+        return Response(data_list, status=status.HTTP_201_CREATED)
+
+class Ai_model_log(APIView):
+
+    def post(self,request):
+        
+        a_ver = Ai_version.objects.all()
+        
+        data_list = []
+
+        for x in a_ver:
+
+            data_list.append(
+                {
+               'ver_name' : x.ver_name,
+                'ver_id' : x.ver_id,
+                'updated_time' : x.updated_time,
+                'count' : len(Brand_status.objects.filter(ver_id = x.ver_id))
+                }
+            )
+
+        
+        
+        data = {
+            'data_list' :data_list,
+            'name' : data_list[-1]['ver_name'],
+            'time' : data_list[-1]['updated_time'],
+        } 
+
+
+    
+        return Response(data, status=status.HTTP_201_CREATED)
+
+class User_data_get_op(APIView):
+
+    def post(self,request):
+
+        email = request.data['email']
+        
+        data_list = []
+        try:
+            user = Marketer_user.objects.get(user_id = User.objects.get(email = email))
+            m_user = Marketer_detail.objects.get(marketer_id = user)
+
+            data_list=[
+            
+                ['나이',m_user.marketer_age],
+                ['지역',m_user.marketer_addr],
+                ['회사업종',m_user.marketer_job],
+                ['경력 년수',m_user.marketer_career],
+                ['참여 형식',m_user.marketer_form],
+                ['플랫폼 실적',m_user.marketer_plat],
+
+            ]
+        except:
+            print(email)
+            user = Brand_user.objects.get(user_id = User.objects.get(nickname = email))
+            b_user = Brand_detail.objects.get(brand_id = user)
+
+
+
+            data_list=[
+
+            ['회사명',b_user.brand_name],
+            ['주소',b_user.brand_addr],
+            ['설립일',b_user.brand_date],
+            ['매출액',b_user.brand_price],
+            ['영업이익',b_user.brand_profit],
+            ['신용등급 점수',b_user.brand_credit_grade_score],
+            ['사원수',b_user.brand_employees],
+            ['상세업종',b_user.brand_industry],
+            ]
+
+        return Response(data_list, status=status.HTTP_201_CREATED)
+
 class User_data_edit(APIView):
 
     def post(self,request):
@@ -847,15 +996,18 @@ class User_data_edit(APIView):
         email = request.data['email']
         data = request.data['data']
 
+
+
         try:
             user = Marketer_user.objects.get(user_id = User.objects.get(email = email))
 
             user.user_id.email = data[0]
             user.phoneNumber = data[1]
             user.user_id.name = data[2]
-
             user.user_id.save()
             user.save()
+
+
 
         except:
             user = Brand_user.objects.get(user_id = User.objects.get(nickname = email))
@@ -867,6 +1019,68 @@ class User_data_edit(APIView):
 
             user.user_id.save()
             user.save()
+
+        return Response( status=status.HTTP_201_CREATED)
+
+class User_data_edit_op(APIView):
+
+    def post(self,request):
+
+        email = request.data['email']
+        data = request.data['data']
+
+        print(data)
+
+        try:
+            user = Marketer_user.objects.get(user_id = User.objects.get(email = email))
+
+            try:
+                m_user = Marketer_detail.objects.get(marketer_id = user)
+
+                m_user.marketer_age = data[0]
+                m_user.marketer_addr = data[1]
+                m_user.marketer_job = data[2]
+                m_user.marketer_career = data[3]
+                m_user.marketer_form = data[4]
+                m_user.marketer_plat = data[5]
+
+                m_user.save()
+
+
+            except:
+                m_user = Marketer_detail.objects.create(
+                    marketer_id = user,
+                    marketer_age = data[0],
+                    marketer_addr = data[1],
+                    marketer_job = data[2],
+                    marketer_career = data[3],
+                    marketer_form = data[4],
+                    marketer_plat = data[5],
+                )
+                m_user.save()
+
+            # user.user_id.email = data[0]
+            # user.phoneNumber = data[1]
+            # user.user_id.name = data[2]
+            # user.user_id.save()
+            # user.save()
+
+        except:
+            user = Brand_user.objects.get(user_id = User.objects.get(nickname = email))
+            b_user = Brand_detail.objects.get(brand_id = user)
+
+
+            b_user.brand_name = data[0]
+            b_user.brand_addr = data[1]
+            b_user.brand_date = data[2]
+            b_user.brand_price = data[3]
+            b_user.brand_profit = data[4]
+            b_user.brand_credit_grade_score = data[5]
+            b_user.brand_employees = data[6]
+            b_user.brand_industry = data[7]
+
+     
+            b_user.save()
 
         return Response( status=status.HTTP_201_CREATED)
 
@@ -927,7 +1141,7 @@ class Get_data(APIView):
         return Response( r_data,status=status.HTTP_201_CREATED)
 
 class Edit_data(APIView):
-    
+
     def post(self,request):
 
         id = request.data['id']
