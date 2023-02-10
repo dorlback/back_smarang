@@ -494,7 +494,7 @@ class Marketer_getgrade(APIView):
 
         return Response( status=status.HTTP_201_CREATED)
 
-        
+
 
 class Ai_delete(APIView):
 

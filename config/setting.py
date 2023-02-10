@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'smarang_back_app',   
 ]
 
+
+
 AUTH_USER_MODEL = 'smarang_back_app.User'  # <myapp_name>.<user_model_name>
 
 MIDDLEWARE = [
